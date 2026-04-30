@@ -1,14 +1,14 @@
 package com.app.cep.infra.http;
 
-import com.app.cep.contracts.httpContracts;
+import com.app.cep.contracts.HttpContract;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-public class ApiAdapter implements httpContracts {
+public class Api implements HttpContract {
 
     private final RestTemplate api;
 
-    public ApiAdapter (RestTemplate api) {
+    public Api(RestTemplate api) {
         this.api = api;
     }
 
