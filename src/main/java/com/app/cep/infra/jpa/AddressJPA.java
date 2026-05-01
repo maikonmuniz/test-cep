@@ -3,6 +3,9 @@ package com.app.cep.infra.jpa;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 @Entity
 @Table(name = "endereco")
 @Getter
@@ -45,4 +48,12 @@ public class AddressJPA {
     private String ddd;
 
     private String siafi;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+    }
 }
