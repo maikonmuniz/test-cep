@@ -2,22 +2,22 @@ package com.app.cep.domain;
 
 import java.time.LocalDateTime;
 
-public class Address {
+public class Endereco {
 
-    private String postalCode;
-    private String street;
-    private String complement;
-    private String unit;
-    private String neighborhood;
-    private String city;
-    private String stateCode;
-    private String state;
-    private String region;
+    private String cep;
+    private String logradouro;
+    private String complemento;
+    private String unidade;
+    private String bairro;
+    private String localidade;
+    private String uf;
+    private String estado;
+    private String regiao;
     private String ibge;
     private String gia;
     private String ddd;
     private String siafi;
-    private LocalDateTime createdAt;
+    private LocalDateTime CreatedAt;
 
     public String getCep() {
         return cep;
@@ -83,12 +83,12 @@ public class Address {
         this.estado = estado;
     }
 
-    public String getRegion() {
-        return region;
+    public String getRegiao() {
+        return regiao;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setRegiao(String regiao) {
+        this.regiao = regiao;
     }
 
     public String getIbge() {
@@ -123,11 +123,11 @@ public class Address {
         this.siafi = siafi;
     }
 
-    public void setCreatedAt (LocalDateTime createdAt){
-        this.createdAt = createdAt;
+    public LocalDateTime getCreatedAt() {
+        return CreatedAt;
     }
 
-    public LocalDateTime getCreatedAt () {
-        return createdAt;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        CreatedAt = createdAt;
     }
 }
