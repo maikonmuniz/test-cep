@@ -34,7 +34,7 @@ services:
     build:
       context: .
 
-    image: developer13031998maikonmuniz/cep:latest
+    image: developer13031998maikonmuniz/test-cep:latest
 
     environment:
       SPRING_DATASOURCE_URL: ${DB_URL}
