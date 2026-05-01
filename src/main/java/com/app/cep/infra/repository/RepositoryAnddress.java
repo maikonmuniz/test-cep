@@ -1,7 +1,7 @@
 package com.app.cep.infra.repository;
 
 import com.app.cep.contracts.RepositoryAnddressContract;
-import com.app.cep.dto.EnderecoDTO;
+import com.app.cep.domain.Endereco;
 import com.app.cep.infra.jpa.AddressJPA;
 import com.app.cep.infra.operationORM.AddressOperationORM;
 
@@ -14,38 +14,42 @@ public class RepositoryAnddress implements RepositoryAnddressContract {
     }
 
     @Override
-    public EnderecoDTO save(EnderecoDTO enderecoDTO) {
+    public Endereco save(Endereco endereco) {
 
         AddressJPA addressJPA = new AddressJPA();
-        addressJPA.setCep(enderecoDTO.getCep());
-        addressJPA.setLogradouro(enderecoDTO.getLogradouro());
-        addressJPA.setComplemento(enderecoDTO.getComplemento());
-        addressJPA.setUnidade(enderecoDTO.getUnidade());
-        addressJPA.setBairro(enderecoDTO.getBairro());
-        addressJPA.setLocalidade(enderecoDTO.getLocalidade());
-        addressJPA.setUf(enderecoDTO.getUf());
-        addressJPA.setEstado(enderecoDTO.getEstado());
-        addressJPA.setRegiao(enderecoDTO.getRegiao());
-        addressJPA.setIbge(enderecoDTO.getIbge());
-        addressJPA.setGia(enderecoDTO.getGia());
-        addressJPA.setDdd(enderecoDTO.getDdd());
-        addressJPA.setSiafi(enderecoDTO.getSiafi());
+        addressJPA.setPostalCode(endereco.getCep());
+        addressJPA.setStreet(endereco.getLogradouro());
+        addressJPA.setComplement(endereco.getComplemento());
+        addressJPA.setUnit(endereco.getUnidade());
+        addressJPA.setNeighborhood(endereco.getBairro());
+        addressJPA.setCity(endereco.getLocalidade());
+        addressJPA.setStateCode(endereco.getUf());
+        addressJPA.setState(endereco.getEstado());
+        addressJPA.setRegion(endereco.getRegiao());
+        addressJPA.setIbge(endereco.getIbge());
+        addressJPA.setGia(endereco.getGia());
+        addressJPA.setDdd(endereco.getDdd());
+        addressJPA.setSiafi(endereco.getSiafi());
 
         AddressJPA addressJPASave = this.addressOperationORM.save(addressJPA);
-        enderecoDTO.setCep(addressJPASave.getCep());
-        enderecoDTO.setLogradouro(addressJPASave.getLogradouro());
-        enderecoDTO.setComplemento(addressJPASave.getComplemento());
-        enderecoDTO.setUnidade(addressJPASave.getUnidade());
-        enderecoDTO.setBairro(addressJPASave.getBairro());
-        enderecoDTO.setLocalidade(addressJPASave.getLocalidade());
-        enderecoDTO.setUf(addressJPASave.getUf());
-        enderecoDTO.setEstado(addressJPASave.getEstado());
-        enderecoDTO.setRegiao(addressJPASave.getRegiao());
-        enderecoDTO.setIbge(addressJPASave.getIbge());
-        enderecoDTO.setGia(addressJPASave.getGia());
-        enderecoDTO.setDdd(addressJPASave.getDdd());
-        enderecoDTO.setSiafi(addressJPASave.getSiafi());
 
-        return enderecoDTO;
+        Endereco addressNew = new Endereco();
+
+        addressNew.setCep(addressJPASave.getPostalCode());
+        addressNew.setLogradouro(addressJPASave.getStreet());
+        addressNew.setComplemento(addressJPASave.getComplement());
+        addressNew.setUnidade(addressJPASave.getUnit());
+        addressNew.setBairro(addressJPASave.getNeighborhood());
+        addressNew.setLocalidade(addressJPASave.getCity());
+        addressNew.setUf(addressJPASave.getStateCode());
+        addressNew.setEstado(addressJPASave.getState());
+        addressNew.setRegiao(addressJPASave.getRegion());
+        addressNew.setIbge(addressJPASave.getIbge());
+        addressNew.setGia(addressJPASave.getGia());
+        addressNew.setDdd(addressJPASave.getDdd());
+        addressNew.setSiafi(addressJPASave.getSiafi());
+        addressNew.setCreatedAt(addressJPASave.getCreatedAt());
+
+        return addressNew;
     }
 }

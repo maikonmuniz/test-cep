@@ -1,5 +1,5 @@
 package com.app.cep.infra.conroller;
-import com.app.cep.dto.EnderecoDTO;
+import com.app.cep.domain.Endereco;
 import com.app.cep.services.CepServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +14,8 @@ public class CepController {
     private CepServices cepServices;
 
     @GetMapping("/{cep}")
-    public EnderecoDTO consultCep(@PathVariable String cep) {
-        EnderecoDTO result = this.cepServices.execute(cep);
+    public Endereco consultCep(@PathVariable String cep) {
+        Endereco result = this.cepServices.execute(cep);
         return result;
     }
 }

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Entity
-@Table(name = "endereco")
+@Table(name = "address")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,30 +16,30 @@ import java.time.ZoneId;
 public class AddressJPA {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // BIGINT → Long
+    private Long id;
 
-    @Column(nullable = false, unique = true, length = 9)
-    private String cep;
-
-    @Column(nullable = false)
-    private String logradouro;
-
-    private String complemento;
-
-    private String unidade;
+    @Column(name = "postal_code" ,nullable = false, unique = true, length = 9)
+    private String postalCode;
 
     @Column(nullable = false)
-    private String bairro;
+    private String street;
+
+    private String complement;
+
+    private String unit;
 
     @Column(nullable = false)
-    private String localidade;
+    private String neighborhood;
 
-    @Column(nullable = false, length = 2)
-    private String uf;
+    @Column(nullable = false)
+    private String city;
 
-    private String estado;
+    @Column(name = "state_code", nullable = false, length = 2)
+    private String stateCode;
 
-    private String regiao;
+    private String state;
+
+    private String region;
 
     private String ibge;
 

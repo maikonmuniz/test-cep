@@ -1,7 +1,7 @@
 package com.app.cep.infra.http;
 
 import com.app.cep.contracts.HttpContract;
-import com.app.cep.dto.EnderecoDTO;
+import com.app.cep.domain.Endereco;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,14 +15,14 @@ public class Api implements HttpContract {
     }
 
     @Override
-    public EnderecoDTO get(String cep) {
+    public Endereco get(String cep) {
         String url = "https://viacep.com.br/ws/" + cep + "/json/";
 
         try {
             String response = this.api.getForObject(url, String.class);
 
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(response, EnderecoDTO.class);
+            return mapper.readValue(response, Endereco.class);
 
         } catch (Exception e) {
             throw new RuntimeException("Erro ao converter JSON: " + e.getMessage());
