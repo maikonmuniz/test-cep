@@ -1,20 +1,23 @@
-package com.app.cep.dto;
+package com.app.cep.domain;
 
-public class EnderecoDTO {
+import java.time.LocalDateTime;
 
-    private String cep;
-    private String logradouro;
-    private String complemento;
-    private String unidade;
-    private String bairro;
-    private String localidade;
-    private String uf;
-    private String estado;
-    private String regiao;
+public class Address {
+
+    private String postalCode;
+    private String street;
+    private String complement;
+    private String unit;
+    private String neighborhood;
+    private String city;
+    private String stateCode;
+    private String state;
+    private String region;
     private String ibge;
     private String gia;
     private String ddd;
     private String siafi;
+    private LocalDateTime createdAt;
 
     public String getCep() {
         return cep;
@@ -80,12 +83,12 @@ public class EnderecoDTO {
         this.estado = estado;
     }
 
-    public String getRegiao() {
-        return regiao;
+    public String getRegion() {
+        return region;
     }
 
-    public void setRegiao(String regiao) {
-        this.regiao = regiao;
+    public void setRegion(String region) {
+        this.region = region;
     }
 
     public String getIbge() {
@@ -118,5 +121,13 @@ public class EnderecoDTO {
 
     public void setSiafi(String siafi) {
         this.siafi = siafi;
+    }
+
+    public void setCreatedAt (LocalDateTime createdAt){
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getCreatedAt () {
+        return createdAt;
     }
 }
