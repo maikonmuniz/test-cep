@@ -1,7 +1,7 @@
 package com.app.cep.contracts;
 
-import com.app.cep.dto.EnderecoDTO;
+import com.app.cep.domain.Endereco;
 
 public interface RepositoryAnddressContract {
-    EnderecoDTO save (EnderecoDTO enderecoDTO);
+    Endereco save (Endereco endereco);
 }
