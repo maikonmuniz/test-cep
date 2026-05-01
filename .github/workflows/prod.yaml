@@ -4,9 +4,6 @@ on:
   push:
     branches: [main]
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,22 +33,38 @@ jobs:
       - name: Push Docker image
         run: docker push developer13031998maikonmuniz/test-cep:latest
 
+      - name: Decode SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" | base64 -d > $HOME/key.pem
+          chmod 400 $HOME/key.pem
+
+      - name: Upload key artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ssh-key
+          path: $HOME/key.pem
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Decode SSH key (BASE64)
+      - name: Download SSH key
+        uses: actions/download-artifact@v4
+        with:
+          name: ssh-key
+
+      - name: Move key
         run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" | base64 -d > key.pem
-          chmod 400 key.pem
+          mv key.pem /tmp/key.pem
+          chmod 400 /tmp/key.pem
 
       - name: Create app directory
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key_path: key.pem
+          key_path: /tmp/key.pem
           script: |
             mkdir -p /home/ubuntu/app
 
@@ -60,16 +73,16 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key_path: key.pem
+          key_path: /tmp/key.pem
           source: "."
           target: "/home/ubuntu/app"
 
-      - name: Deploy via SSH (Docker Compose on EC2)
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key_path: key.pem
+          key_path: /tmp/key.pem
           script: |
             cd /home/ubuntu/app
 
