@@ -44,12 +44,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Decode SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY_BASE64 }}" | base64 -d > key.pem
+          chmod 400 key.pem
+
+      - name: Create app directory
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key_path: key.pem
+          script: |
+            mkdir -p /home/ubuntu/app
+
       - name: Copy project to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ec2-user
-          key: ${{ secrets.EC2_SSH_KEY }}
+          username: ubuntu
+          key_path: key.pem
           source: "."
           target: "/home/ubuntu/app"
 
@@ -58,10 +72,9 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key_path: key.pem
           script: |
-            mkdir -p /home/ec2-user/app
-            cd /home/ec2-user/app
+            cd /home/ubuntu/app
 
             echo "DB_URL=${{ secrets.DB_URL }}" > .env
             echo "PASSWORD_ROOT=${{ secrets.PASSWORD_ROOT }}" >> .env
@@ -70,4 +83,4 @@ jobs:
             echo "DB_PASS=${{ secrets.DB_PASS }}" >> .env
 
             docker compose down
-            docker compose up -d
+            docker compose up -d --build

@@ -9,5 +9,4 @@ public class CepApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CepApplication.class, args);
 	}
-
 }
