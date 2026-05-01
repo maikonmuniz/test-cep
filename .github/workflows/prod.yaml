@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,58 +36,32 @@ jobs:
       - name: Push Docker image
         run: docker push developer13031998maikonmuniz/test-cep:latest
 
-      - name: Decode SSH key
-        run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" | base64 -d > $HOME/key.pem
-          chmod 400 $HOME/key.pem
-
-      - name: Upload key artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ssh-key
-          path: $HOME/key.pem
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download SSH key
-        uses: actions/download-artifact@v4
-        with:
-          name: ssh-key
-
-      - name: Move key
-        run: |
-          mv key.pem /tmp/key.pem
-          chmod 400 /tmp/key.pem
-
-      - name: Create app directory
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key_path: /tmp/key.pem
-          script: |
-            mkdir -p /home/ubuntu/app
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Copy project to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key_path: /tmp/key.pem
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
           source: "."
-          target: "/home/ubuntu/app"
+          target: "/home/ec2-user/app"
 
-      - name: Deploy via SSH
+      - name: Deploy via SSH (Docker Compose on EC2)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key_path: /tmp/key.pem
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /home/ubuntu/app
+            mkdir -p /home/ec2-user/app
+            cd /home/ec2-user/app
 
             echo "DB_URL=${{ secrets.DB_URL }}" > .env
             echo "PASSWORD_ROOT=${{ secrets.PASSWORD_ROOT }}" >> .env
@@ -92,5 +69,5 @@ jobs:
             echo "DB_USER=${{ secrets.DB_USER }}" >> .env
             echo "DB_PASS=${{ secrets.DB_PASS }}" >> .env
 
-            docker compose down || true
-            docker compose up -d --build
+            docker compose down
+            docker compose up -d
